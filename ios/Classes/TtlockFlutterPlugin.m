@@ -30,15 +30,11 @@ typedef NS_ENUM(NSInteger, ResultState) {
     [eventChannel setStreamHandler:[self sharedInstance]];
 }
 
-+ (instancetype)sharedInstance{
++ (instancetype)sharedInstance {
     static TtlockFlutterPlugin *instance = nil;
     if (!instance) {
         instance = [[self alloc] init];
-        [TTLock setupBluetooth:^(TTBluetoothState state) {
-            if (state != TTBluetoothStatePoweredOn) {
-                NSLog(@"####### Bluetooth is off or un unauthorized ########");
-            }
-        }];
+        // Eliminamos la inicialización de Bluetooth aquí
     }
     return instance;
 }
@@ -54,6 +50,15 @@ typedef NS_ENUM(NSInteger, ResultState) {
     }else if ([arguments isKindOfClass:NSString.class]) {
         lockModel = [TtlockModel new];
         lockModel.lockData = (NSString *)arguments;
+    }
+
+    // Inicializamos Bluetooth solo si es necesario
+     if (TTLock.bluetoothState == TTBluetoothStateUnknown) {
+        [TTLock setupBluetooth:^(TTBluetoothState state) {
+            if (state != TTBluetoothStatePoweredOn) {
+                NSLog(@"####### Bluetooth is off or unauthorized ########");
+            }
+        }];
     }
     
     if (TTLock.bluetoothState != TTBluetoothStatePoweredOn) {
