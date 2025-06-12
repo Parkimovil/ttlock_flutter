@@ -40,14 +40,32 @@ typedef NS_ENUM(NSInteger, ResultState) {
 }
 
 #pragma mark  - FlutterPlugin
+- (void)ensureBluetoothReadyWithCompletion:(void (^)(BOOL ready))completion {
+    if (TTLock.bluetoothState == TTBluetoothStatePoweredOn) {
+        completion(YES);
+    } else if (TTLock.bluetoothState == TTBluetoothStateUnknown) {
+        [TTLock setupBluetooth:^(TTBluetoothState state) {
+            completion(state == TTBluetoothStatePoweredOn);
+        }];
+    } else {
+        completion(NO);
+    }
+}
 - (void)handleMethodCall:(FlutterMethodCall *)call result:(FlutterResult)result{
+    [self ensureBluetoothReadyWithCompletion:^(BOOL ready) {
+    if (!ready) {
+        NSLog(@"####### Bluetooth is off or unauthorized ########");
+        // Return an error to Flutter if Bluetooth is not ready
+        result([FlutterError errorWithCode:@"bluetooth_unavailable"
+                                   message:@"Bluetooth is off or unauthorized"
+                                   details:nil]);
+        return;
+    }
+    // ...continue with the command logic...
+
     __weak TtlockFlutterPlugin *weakSelf = self;
     NSString *command = call.method;
     NSObject *arguments = call.arguments;
-
-    
-    TTLock.bluetoothState = TTBluetoothStatePoweredOn;
-
     TtlockModel *lockModel = nil;
     if ([arguments isKindOfClass:NSDictionary.class]) {
         lockModel = [TtlockModel modelWithDict:(NSDictionary *)arguments];
@@ -55,7 +73,7 @@ typedef NS_ENUM(NSInteger, ResultState) {
         lockModel = [TtlockModel new];
         lockModel.lockData = (NSString *)arguments;
     }
-
+    
     if ([command isEqualToString:command_start_scan_lock]) {
         [TTLock startScan:^(TTScanModel *scanModel) {
             TtlockModel *data = [TtlockModel new];
@@ -859,6 +877,7 @@ typedef NS_ENUM(NSInteger, ResultState) {
             [weakSelf errorCallbackCommand:command code:errorCode details:errorMsg];
         }];
     }
+    }];
     
 #pragma mark - 人脸识别
     else if ([command isEqualToString:command_face_add]) {
