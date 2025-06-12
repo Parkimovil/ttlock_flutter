@@ -45,6 +45,8 @@ typedef NS_ENUM(NSInteger, ResultState) {
     NSString *command = call.method;
     NSObject *arguments = call.arguments;
 
+   // Inicializamos Bluetooth solo si es necesario
+    TTBluetoothState state = [TTLock bluetoothState];
     TtlockModel *lockModel = nil;
     if ([arguments isKindOfClass:NSDictionary.class]) {
         lockModel = [TtlockModel modelWithDict:(NSDictionary *)arguments];
@@ -52,6 +54,8 @@ typedef NS_ENUM(NSInteger, ResultState) {
         lockModel = [TtlockModel new];
         lockModel.lockData = (NSString *)arguments;
     }
+
+
     
     if ([command isEqualToString:command_start_scan_lock]) {
         [TTLock startScan:^(TTScanModel *scanModel) {
