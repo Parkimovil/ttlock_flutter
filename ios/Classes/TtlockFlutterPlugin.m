@@ -61,10 +61,6 @@ typedef NS_ENUM(NSInteger, ResultState) {
         }];
     }
     
-    if (TTLock.bluetoothState != TTBluetoothStatePoweredOn) {
-        NSLog(@"####### Bluetooth is off or un unauthorized ########");
-    }
-    
     if ([command isEqualToString:command_start_scan_lock]) {
         [TTLock startScan:^(TTScanModel *scanModel) {
             TtlockModel *data = [TtlockModel new];
