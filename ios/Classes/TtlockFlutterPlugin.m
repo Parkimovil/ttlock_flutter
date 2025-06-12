@@ -44,21 +44,13 @@ typedef NS_ENUM(NSInteger, ResultState) {
     __weak TtlockFlutterPlugin *weakSelf = self;
     NSString *command = call.method;
     NSObject *arguments = call.arguments;
+
     TtlockModel *lockModel = nil;
     if ([arguments isKindOfClass:NSDictionary.class]) {
         lockModel = [TtlockModel modelWithDict:(NSDictionary *)arguments];
     }else if ([arguments isKindOfClass:NSString.class]) {
         lockModel = [TtlockModel new];
         lockModel.lockData = (NSString *)arguments;
-    }
-
-    // Inicializamos Bluetooth solo si es necesario
-     if (TTLock.bluetoothState == TTBluetoothStateUnknown) {
-        [TTLock setupBluetooth:^(TTBluetoothState state) {
-            if (state != TTBluetoothStatePoweredOn) {
-                NSLog(@"####### Bluetooth is off or unauthorized ########");
-            }
-        }];
     }
     
     if ([command isEqualToString:command_start_scan_lock]) {
