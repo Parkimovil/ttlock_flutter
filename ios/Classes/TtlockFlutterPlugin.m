@@ -877,7 +877,6 @@ typedef NS_ENUM(NSInteger, ResultState) {
             [weakSelf errorCallbackCommand:command code:errorCode details:errorMsg];
         }];
     }
-    }];
     
 #pragma mark - 人脸识别
     else if ([command isEqualToString:command_face_add]) {
@@ -1081,6 +1080,7 @@ typedef NS_ENUM(NSInteger, ResultState) {
             }
         }];
     }
+    }];
 }
 
 
