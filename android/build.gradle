@@ -3,12 +3,11 @@ version '1.0'
 
 buildscript {
     ext {
-        agp_version = '4.1.2'
+        agp_version = '7.4.2'
     }
     repositories {
         mavenCentral()
         google()
-        jcenter()
     }
 
     dependencies {
@@ -20,7 +19,6 @@ rootProject.allprojects {
     repositories {
         mavenCentral()
         google()
-        jcenter()
         flatDir {
             dirs 'libs'
         }
@@ -30,24 +28,38 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 31
     namespace 'com.ttlock.ttlock_flutter'
+    compileSdkVersion 35
+    ndkVersion '27.0.12077973'
+
     defaultConfig {
-        minSdkVersion 18
+        minSdkVersion 21
     }
-    lintOptions {
-        disable 'InvalidPackage'
-    }
+
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // 16 KB page-size compatibility (Android 15+): keep .so files uncompressed
+    // and page-aligned inside the consuming APK/AAB. Required for Play Console
+    // uploads with targetSdkVersion >= 35.
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = false
+        }
+    }
+
+    lint {
+        disable 'InvalidPackage'
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    // 3.5.5+ ships libLockCore.so with p_align=0x4000 on arm64-v8a and x86_64,
+    // which is required for Android 15+ 16 KB pages. Do not downgrade below 3.5.5.
     implementation 'com.ttlock:ttlock:3.5.6'
     implementation 'com.google.code.gson:gson:2.6.2'
-   // implementation(name: 'ttlock-release', ext: 'aar')
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 }
