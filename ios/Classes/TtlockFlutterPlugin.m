@@ -30,21 +30,39 @@ typedef NS_ENUM(NSInteger, ResultState) {
     [eventChannel setStreamHandler:[self sharedInstance]];
 }
 
-+ (instancetype)sharedInstance{
++ (instancetype)sharedInstance {
     static TtlockFlutterPlugin *instance = nil;
     if (!instance) {
         instance = [[self alloc] init];
-        [TTLock setupBluetooth:^(TTBluetoothState state) {
-            if (state != TTBluetoothStatePoweredOn) {
-                NSLog(@"####### Bluetooth is off or un unauthorized ########");
-            }
-        }];
+        // Eliminamos la inicialización de Bluetooth aquí
     }
     return instance;
 }
 
 #pragma mark  - FlutterPlugin
+- (void)ensureBluetoothReadyWithCompletion:(void (^)(BOOL ready))completion {
+    if (TTLock.bluetoothState == TTBluetoothStatePoweredOn) {
+        completion(YES);
+    } else if (TTLock.bluetoothState == TTBluetoothStateUnknown) {
+        [TTLock setupBluetooth:^(TTBluetoothState state) {
+            completion(state == TTBluetoothStatePoweredOn);
+        }];
+    } else {
+        completion(NO);
+    }
+}
 - (void)handleMethodCall:(FlutterMethodCall *)call result:(FlutterResult)result{
+    [self ensureBluetoothReadyWithCompletion:^(BOOL ready) {
+    if (!ready) {
+        NSLog(@"####### Bluetooth is off or unauthorized ########");
+        // Return an error to Flutter if Bluetooth is not ready
+        result([FlutterError errorWithCode:@"bluetooth_unavailable"
+                                   message:@"Bluetooth is off or unauthorized"
+                                   details:nil]);
+        return;
+    }
+    // ...continue with the command logic...
+
     __weak TtlockFlutterPlugin *weakSelf = self;
     NSString *command = call.method;
     NSObject *arguments = call.arguments;
@@ -54,10 +72,6 @@ typedef NS_ENUM(NSInteger, ResultState) {
     }else if ([arguments isKindOfClass:NSString.class]) {
         lockModel = [TtlockModel new];
         lockModel.lockData = (NSString *)arguments;
-    }
-    
-    if (TTLock.bluetoothState != TTBluetoothStatePoweredOn) {
-        NSLog(@"####### Bluetooth is off or un unauthorized ########");
     }
     
     if ([command isEqualToString:command_start_scan_lock]) {
@@ -1066,6 +1080,7 @@ typedef NS_ENUM(NSInteger, ResultState) {
             }
         }];
     }
+    }];
 }
 
 
