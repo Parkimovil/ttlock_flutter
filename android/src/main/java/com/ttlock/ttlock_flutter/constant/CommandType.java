@@ -9,4 +9,7 @@ public class CommandType {
 
     public static final int DOOR_SENSOR = 5;
 
+    public static final int ELECTRICITY_METER = 5;
+    public static final int WATER_METER = 6;
+
 }

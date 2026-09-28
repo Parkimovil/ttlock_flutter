@@ -85,6 +85,10 @@
 
 #define command_verify_lock @"verifyLock"
 
+#define command_clear_remote_key @"clearRemoteKey"
+
+
+
 #pragma mark - 网关指令
 #define command_start_scan_gateway @"startScanGateway"
 #define command_stop_scan_gateway @"stopScanGateway"
@@ -94,6 +98,7 @@
 #define command_init_gateway @"initGateway"
 #define command_config_gateway_ip @"gatewayConfigIp"
 #define command_upgrade_gateway @"upgradeGateway"
+#define command_gateway_config_apn @"gatewayConfigApn"
 
 
 #pragma mark - 梯控
@@ -149,6 +154,12 @@
 #define command_remote_keypad_stop_scan @"remoteKeypadStopScan"
 #define command_remote_keypad_init @"remoteKeypadInit"
 
+#define command_mutifuctional_remote_keypad_init @"multifunctionalRemoteKeypadInit"
+#define command_mutifuctional_remote_keypad_delete_lock @"multifunctionalRemoteKeypadDeleteLock"
+#define command_mutifuctional_remote_keypad_get_locks @"multifunctionalRemoteKeypadGetLocks"
+#define command_mutifuctional_remote_keypad_add_fingerprint @"multifunctionalRemoteKeypadAddFingerprint"
+#define command_mutifuctional_remote_keypad_add_card @"multifunctionalRemoteKeypadAddCard"
+
 #pragma mark - 酒店锁
 #define command_set_hotel_card_sector @"setHotelCardSector"
 #define command_set_hotel_info @"setHotelInfo"
@@ -163,6 +174,46 @@
 #define command_get_all_valid_passcode @"getAllValidPasscode"
 #define command_get_all_valid_fingerprint @"getAllValidFingerprint"
 #define command_get_all_valid_card @"getAllValidIcCard"
+
+#pragma mark - 电表
+
+#define command_electric_meter_config_server @"electricMeterConfigServer"
+#define command_electric_meter_start_scan @"electricMeterStartScan"
+#define command_electric_meter_stop_scan @"electricMeterStopScan"
+#define command_electric_meter_connect @"electricMeterConnect"
+#define command_electric_meter_disconnect @"electricMeterDisconnect"
+#define command_electric_meter_init @"electricMeterInit"
+#define command_electric_meter_delete @"electricMeterDelete"
+#define command_electric_meter_set_power_on_off @"electricMeterSetPowerOnOff"
+#define command_electric_meter_set_remaining_electricity @"electricMeterSetRemainingElectricity"
+#define command_electric_meter_clear_remaining_electricity @"electricMeterClearRemainingElectricity"
+#define command_electric_meter_read_data @"electricMeterReadData"
+#define command_electric_meter_set_pay_mode @"electricMeterSetPayMode"
+#define command_electric_meter_charg @"electricMeterCharg"
+#define command_electric_meter_set_max_power @"electricMeterSetMaxPower"
+#define command_electric_meter_get_feature_value @"electricMeterGetFeatureValue"
+#define command_electric_meter_enter_upgrade_mode @"electricMeterEnterUpgradeMode"
+
+
+
+#pragma mark - 水表
+#define command_water_meter_config_server @"waterMeterConfigServer"
+#define command_water_meter_start_scan @"waterMeterStartScan"
+#define command_water_meter_stop_scan @"waterMeterStopScan"
+#define command_water_meter_connect @"waterMeterConnect"
+#define command_water_meter_disconnect @"waterMeterDisconnect"
+#define command_water_meter_init @"waterMeterInit"
+#define command_water_meter_delete @"waterMeterDelete"
+#define command_water_meter_set_power_on_off @"waterMeterSetPowerOnOff"
+#define command_water_meter_set_remaining_m3 @"waterMeterSetRemainingM3"
+#define command_water_meter_clear_remaining_m3 @"waterMeterClearRemainingM3"
+#define command_water_meter_read_data @"waterMeterReadData"
+#define command_water_meter_set_pay_mode @"waterMeterSetPayMode"
+#define command_water_meter_charge @"waterMeterCharge"
+#define command_water_meter_set_total_usage @"waterMeterSetTotalUsage"
+#define command_water_meter_get_feature_value @"waterMeterGetFeatureValue"
+#define command_water_meter_enter_upgrade_mode @"waterMeterEnterUpgradeMode"
+
 
 
 
